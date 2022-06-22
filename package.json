@@ -1,0 +1,23 @@
+{
+  "name": "paclock",
+  "version": "1.1.0",
+  "description": "Paco's Clock",
+  "scripts": {
+    "start": "parcel src/index.html --open",
+    "build": "parcel build src/index.html"
+  },
+  "dependencies": {
+    "moment": "^2.29.3",
+    "normalize.css": "^8.0.1",
+    "p5": "^1.4.1"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "2.6.0",
+    "@parcel/transformer-webmanifest": "2.6.0",
+    "parcel": "^2.6.0",
+    "prettier": "2.6.2"
+  },
+  "keywords": [
+    "clock"
+  ]
+}
