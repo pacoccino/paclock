@@ -4,6 +4,7 @@ const colors = {
   background: 15,
   foreground: 240,
   f200: 200,
+  f400: 160,
   f600: 100,
 }
 
@@ -23,8 +24,22 @@ function clockToGeo(clock) {
 }
 
 export const mySketch = (clock) => (p) => {
-  let rayon = (Math.min(window.innerWidth, window.innerHeight) * 0.8) / 2
-  let donutWidth = 0.05 * rayon
+  let rayon, donutWidth, baseFontWeight
+
+  const resize = () => {
+    const minw = Math.min(window.innerWidth, window.innerHeight)
+    if (minw > 500) {
+      rayon = (minw * 0.85) / 2
+      donutWidth = 0.07 * rayon
+      baseFontWeight = 14
+    } else {
+      rayon = (minw * 0.9) / 2
+      donutWidth = 0.1 * rayon
+      baseFontWeight = 10
+    }
+  }
+
+  resize()
 
   p.setup = () => {
     p.createCanvas(window.innerWidth, window.innerHeight)
@@ -100,19 +115,19 @@ export const mySketch = (clock) => (p) => {
 
     // texts
     p.textAlign(p.CENTER, p.CENTER)
-    p.textSize(64)
+    p.textSize(baseFontWeight * 4)
     p.fill(colors.foreground)
     p.text(`${clock.now.format('HH:mm')}`, 0, 0)
     p.strokeWeight(1)
-    p.textSize(24)
+    p.textSize(baseFontWeight * 2)
     p.fill(colors.f200)
     p.text(
       `${clock.sunrise.format('HH:mm')} - ${clock.sunset.format('HH:mm')}`,
       0,
-      60
+      baseFontWeight * 4
     )
-    p.textSize(14)
-    p.fill(colors.f600)
+    p.textSize(baseFontWeight)
+    p.fill(colors.f400)
     p.text(
       [
         clock.location.district,
@@ -122,13 +137,12 @@ export const mySketch = (clock) => (p) => {
         .filter((e) => !!e)
         .join(', '),
       0,
-      100
+      -baseFontWeight * 4
     )
   }
 
   p.windowResized = () => {
     p.resizeCanvas(window.innerWidth, window.innerHeight)
-    rayon = (Math.min(window.innerWidth, window.innerHeight) * 0.8) / 2
-    donutWidth = 0.05 * rayon
+    resize()
   }
 }

@@ -63,7 +63,7 @@ export class Clock {
     if (this.now && TESTMODE) {
       this.now = this.now.add(30, 'minutes')
     } else {
-      this.now = moment()
+      this.now = moment({ hours: 0, minutes: 0 })
     }
 
     this.astronomicalStatus =
