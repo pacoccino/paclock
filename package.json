@@ -3,7 +3,7 @@
   "version": "1.1.0",
   "description": "Paco's Clock",
   "scripts": {
-    "start": "parcel src/index.html --open",
+    "start": "parcel src/index.html",
     "build": "parcel build src/index.html"
   },
   "dependencies": {
