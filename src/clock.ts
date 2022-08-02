@@ -1,11 +1,10 @@
 import moment, { Moment } from 'moment'
+import { Location, Sun, Utils } from './lib/sun'
 
-export enum STATUS {
+export enum ASTRONOMICAL_STATUS {
   DAY,
   NIGHT,
 }
-
-const gps = [48.864716, 2.349014] // paris
 
 const TESTMODE = window.location.search === '?test'
 
@@ -14,21 +13,52 @@ export class Clock {
   sunrise: Moment
   sunset: Moment
   noon: Moment
-  astronomicalStatus: STATUS
+  astronomicalStatus: ASTRONOMICAL_STATUS
+  timezone: number
   interval: number
-  location: any
+  location: Location
 
   constructor() {
     this.sunrise = moment({ hour: 0, minute: 0 })
     this.sunset = moment({ hour: 0, minute: 0 })
+    this.noon = moment({ hour: 0, minute: 0 })
+
+    this.location = {
+      lat: 48.864716, // Paris
+      long: 2.349014,
+    }
+
+    this.timezone = -new Date().getTimezoneOffset() / 60
+
     this.tick()
+    this.getLocation()
   }
 
   start() {
     this.interval = setInterval(this.tick.bind(this), 1000)
-    this.fetchSun().catch(console.error)
   }
 
+  getLocation() {
+    const options = {
+      enableHighAccuracy: true,
+      maximumAge: 30000,
+      timeout: 27000,
+    }
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.location.lat = position.coords.latitude
+          this.location.long = position.coords.longitude
+          console.log('location from geoloc', this.location)
+        },
+        (error) => {
+          console.error(error)
+        },
+        options
+      )
+    }
+  }
+  /*
   async fetchByGeoloc() {
     const url = `https://api.sunrise-sunset.org/json?lat=${gps[0]}&lng=${gps[1]}&formatted=0`
     const res = await fetch(url)
@@ -56,7 +86,28 @@ export class Clock {
   }
   async fetchSun() {
     await this.fetchByIP()
-    // TODO update every day
+  }
+   */
+
+  calculateSun() {
+    const result = Sun.calculate(this.now, this.location, this.timezone)
+
+    const sunnoon = Utils.minutesToHour(result.solnoon)
+    const sunrise = Utils.minutesToHour(result.rise.timelocal)
+    const sunset = Utils.minutesToHour(result.set.timelocal)
+
+    this.sunset = moment({
+      hour: sunset.hours,
+      minute: sunset.minutes,
+    })
+    this.sunrise = moment({
+      hour: sunrise.hours,
+      minute: sunrise.minutes,
+    })
+    this.noon = moment({
+      hour: sunnoon.hours,
+      minute: sunnoon.minutes,
+    })
   }
 
   tick() {
@@ -66,9 +117,11 @@ export class Clock {
       this.now = moment()
     }
 
+    this.calculateSun()
+
     this.astronomicalStatus =
       this.now.isAfter(this.sunrise) && this.now.isBefore(this.sunset)
-        ? STATUS.DAY
-        : STATUS.NIGHT
+        ? ASTRONOMICAL_STATUS.DAY
+        : ASTRONOMICAL_STATUS.NIGHT
   }
 }

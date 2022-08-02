@@ -1,4 +1,4 @@
-import { STATUS } from './clock'
+import { ASTRONOMICAL_STATUS } from './clock'
 import { Themes } from './themes'
 
 const theme = Themes.bw
@@ -102,7 +102,7 @@ export const clockSketch = (clock) => (p) => {
     p.line(0, -rayon - (1 / 2) * donutWidth, 0, -rayon + (3 / 2) * donutWidth)
     // inner
     p.stroke(
-      clock.astronomicalStatus === STATUS.DAY
+      clock.astronomicalStatus === ASTRONOMICAL_STATUS.DAY
         ? theme.background
         : theme.foreground
     )
