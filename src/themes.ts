@@ -18,3 +18,5 @@ export const Themes = {
     day: '#de9610',
   },
 }
+
+export const theme = Themes.bw

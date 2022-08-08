@@ -3,10 +3,12 @@ import P5 from 'p5'
 
 import { clockSketch } from './sketch'
 import { Clock } from './clock'
-// import { Test } from './lib/sun.test'
+// import { SunTest } from './lib/sun.test'
+import { MoonTest } from './lib/moon.test'
 
 async function App() {
-  //Test()
+  MoonTest()
+
   const clock = new Clock()
   clock.start()
   new P5(clockSketch(clock), document.getElementById('sketch'))
