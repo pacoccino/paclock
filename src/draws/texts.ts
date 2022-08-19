@@ -7,6 +7,8 @@ import { Responsive } from '../sketch'
 export function drawText(p: P5, clock: Clock, responsive: Responsive) {
   p.push()
 
+  p.translate(p.width / 2, p.height / 2)
+
   p.noStroke()
   p.textAlign(p.CENTER, p.CENTER)
   p.textSize(responsive.baseFontWeight * 4)

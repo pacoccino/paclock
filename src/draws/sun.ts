@@ -25,6 +25,8 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
 
   p.push()
 
+  p.translate(p.width / 2, p.height / 2)
+
   // ARC Night
   p.fill(theme.night)
   p.noStroke()

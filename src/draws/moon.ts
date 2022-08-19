@@ -9,7 +9,18 @@ export function drawMoon(p: P5, clock: Clock, responsive: Responsive) {
 
   p.push()
 
-  p.translate(0, -140)
+  p.translate(p.width / 2, p.height / 2 - responsive.sunRadius / 2)
+
+  /* TODO inclination
+  const incl = p.HALF_PI - (clock.location.lat / 180) * p.PI
+  p.rotate(incl)
+
+  // if (clock.location.lat < 0) {
+  // p.rotate(p.PI)
+  // }
+
+   */
+
   p.rectMode(p.CENTER)
 
   // outer ring
