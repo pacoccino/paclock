@@ -18,10 +18,10 @@ export function ReactApp() {
         <Sketch clock={clock} />
       </div>
       <div
-        className="absolute right-0 top-0 m-4"
+        className="fixed right-0 top-0 m-4 text-xl cursor-pointer"
         onClick={() => setInfoOpen(!infoOpen)}
       >
-        +
+        {infoOpen ? 'ℹ' : '🕘'}
       </div>
     </div>
   )
