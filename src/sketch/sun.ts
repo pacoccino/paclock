@@ -7,9 +7,9 @@ import { Responsive } from '../sketch'
 
 function clockToGeo(clock) {
   const dayMinutes = 24 * 60
-  const sunriseMinutes = clock.sunrise.hours() * 60 + clock.sunrise.minutes()
-  const sunsetMinutes = clock.sunset.hours() * 60 + clock.sunset.minutes()
-  const noonMinutes = clock.noon.hours() * 60 + clock.noon.minutes()
+  const sunriseMinutes = clock.sun.rise.timeLocal
+  const sunsetMinutes = clock.sun.set.timeLocal
+  const noonMinutes = clock.sun.noon.timeLocal
   const nowMinutes = clock.now.hours() * 60 + clock.now.minutes()
 
   const geoClock = {

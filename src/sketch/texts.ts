@@ -14,6 +14,8 @@ export function drawText(p: P5, clock: Clock, responsive: Responsive) {
   p.textSize(responsive.baseFontWeight * 4)
   p.fill(theme.foreground)
   p.text(`${clock.now.format('HH:mm')}`, 0, 0)
+
+  /*
   p.textSize(responsive.baseFontWeight * 1.5)
   p.fill(theme.f200)
   p.text(
@@ -22,9 +24,7 @@ export function drawText(p: P5, clock: Clock, responsive: Responsive) {
     responsive.baseFontWeight * 6
   )
 
-  p.pop()
 
-  /*
 p.textSize(baseFontWeight)
 p.fill(theme.f400)
 p.text(
@@ -39,4 +39,5 @@ p.text(
  -baseFontWeight * 4
 )
 */
+  p.pop()
 }

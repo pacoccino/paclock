@@ -1,4 +1,5 @@
 import BN from 'bignumber.js'
+import moment from 'moment'
 
 const MOON_ORBITAL_PERIOD = new BN(29.530588) // days
 const MOON_PHASES = 8
@@ -8,8 +9,6 @@ const NEW_MOON_BASE = new BN(1587608820000) // 24 janvier 2020	22:44:11
 
 // const DAYS_TO_MS = new BN(1000);
 const DAYS_TO_MS = new BN(24).times(60).times(60).times(1000)
-
-let i = 7
 
 interface MoonState {
   age: BN
@@ -25,10 +24,9 @@ interface MoonState {
 }
 
 const MoonLib = {
-  getState(): MoonState {
-    const diffNow = new BN(Date.now() + i).minus(NEW_MOON_BASE)
+  calculate(date: moment.Moment): MoonState {
+    const diffNow = new BN(+date).minus(NEW_MOON_BASE)
 
-    // const moonAge = new BN(i)
     const moonAge = diffNow.div(DAYS_TO_MS).modulo(MOON_ORBITAL_PERIOD)
 
     const ageNorm = moonAge.div(MOON_ORBITAL_PERIOD)
@@ -36,8 +34,6 @@ const MoonLib = {
       .div(PHASE_DURATION)
       .integerValue(BN.ROUND_FLOOR)
       .toNumber()
-
-    // i = (i + 1) % MOON_ORBITAL_PERIOD.toNumber()
 
     return {
       age: moonAge,
