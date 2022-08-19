@@ -2,6 +2,7 @@ import 'normalize.css'
 import { createRoot } from 'react-dom/client'
 
 import { ReactApp } from './react'
+import './styles.css'
 
 // import { SunTest } from './lib/sun.test'
 // import { MoonTest } from './lib/moon.test'

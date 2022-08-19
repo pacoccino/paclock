@@ -1,6 +1,6 @@
 export function Infos({ clock }) {
   return (
-    <div className="">
+    <div className="w-max bg-black">
       <div id="info" className="">
         <h1>PaClock</h1>
         <h2>General</h2>

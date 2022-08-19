@@ -10,12 +10,18 @@ export function ReactApp() {
   const [infoOpen, setInfoOpen] = useState(false)
 
   return (
-    <div>
-      <Sketch clock={clock} />
-      {infoOpen && <Infos clock={clock} />}
-      <h1>cc</h1>
-      <div className="mode-switch" onClick={() => setInfoOpen(!infoOpen)}>
-        x
+    <div className="relative">
+      <div className={infoOpen ? 'hidden' : 'visible'}>
+        <Infos clock={clock} />
+      </div>
+      <div className={infoOpen ? 'visible' : 'hidden'}>
+        <Sketch clock={clock} />
+      </div>
+      <div
+        className="absolute right-0 top-0 m-4"
+        onClick={() => setInfoOpen(!infoOpen)}
+      >
+        +
       </div>
     </div>
   )
