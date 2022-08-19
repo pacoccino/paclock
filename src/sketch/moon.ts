@@ -1,5 +1,5 @@
 import P5 from 'p5'
-import { Clock } from '../clock'
+import { Clock } from '../lib/clock'
 import { Responsive } from '../sketch'
 
 export function drawMoon(p: P5, clock: Clock, responsive: Responsive) {

@@ -1,6 +1,6 @@
 import P5 from 'p5'
 
-import { ASTRONOMICAL_STATUS, Clock } from '../clock'
+import { ASTRONOMICAL_STATUS, Clock } from '../lib/clock'
 
 import { theme } from '../themes'
 import { Responsive } from '../sketch'

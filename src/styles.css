@@ -28,3 +28,10 @@ body {
   user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }
+
+.mode-switch {
+  position: absolute;
+  top:0;
+  right:0;
+  margin: 10px;
+}

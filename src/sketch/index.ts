@@ -1,8 +1,8 @@
 import P5 from 'p5'
-import { drawMoon } from './draws/moon'
-import { drawSun } from './draws/sun'
-import { drawText } from './draws/texts'
-import { theme } from './themes'
+import { drawMoon } from './moon'
+import { drawSun } from './sun'
+import { drawText } from './texts'
+import { theme } from '../themes'
 
 export interface Responsive {
   minW: number

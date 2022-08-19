@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
-import { Location, Sun, Utils } from './lib/sun'
-import { MoonLib, MoonState } from './lib/moon'
+import { Location, Sun, Utils } from './sun'
+import { MoonLib, MoonState } from './moon'
 
 export enum ASTRONOMICAL_STATUS {
   DAY,
