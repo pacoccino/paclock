@@ -41,12 +41,12 @@ function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
 
   p.fill(theme.cardinalDown)
   p.stroke(theme.cardinalDown)
-  drawAngle(270, 'W')
-  drawAngle(90, 'E')
+  drawAngle(270, 'E')
+  drawAngle(90, 'W')
   p.fill(theme.cardinalRaise)
   p.stroke(theme.cardinalRaise)
-  drawAngle(0, 'N')
-  drawAngle(180, 'S')
+  drawAngle(0, 'S')
+  drawAngle(180, 'N')
 
   // p.stroke(theme.f200)
   // drawAngle(clock.sun.set.azimuth, '👇')
@@ -68,8 +68,8 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
     0,
     responsive.sunRadius * 2,
     responsive.sunRadius * 2,
-    p.radians(clock.sun.set.azimuth) - Math.PI / 2,
-    p.radians(clock.sun.rise.azimuth) - Math.PI / 2
+    p.radians(clock.sun.set.azimuth) + Math.PI / 2,
+    p.radians(clock.sun.rise.azimuth) + Math.PI / 2
   )
 
   // ARC Day
@@ -80,8 +80,8 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
     0,
     responsive.sunRadius * 2,
     responsive.sunRadius * 2,
-    p.radians(clock.sun.rise.azimuth) - Math.PI / 2,
-    p.radians(clock.sun.set.azimuth) - Math.PI / 2
+    p.radians(clock.sun.rise.azimuth) + Math.PI / 2,
+    p.radians(clock.sun.set.azimuth) + Math.PI / 2
   )
 
   // Make donut hole
@@ -106,7 +106,7 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
     0,
     -responsive.sunRadius + (1 / 2) * responsive.donutWidth
   )
-  v1.rotate(p.radians(clock.sun.azel.azimuth))
+  v1.rotate(p.radians(clock.sun.azel.azimuth + 180))
   p.circle(v1.x, v1.y, responsive.donutWidth)
 
   // cursor
@@ -117,20 +117,8 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
 
   p.push()
   p.stroke(theme.sun)
-  p.rotate(p.radians(clock.sun.azel.azimuth))
+  p.rotate(p.radians(clock.sun.azel.azimuth + 180))
   p.line(0, -0.4 * responsive.sunRadius, 0, -0.8 * responsive.sunRadius)
-  // inner
-  p.stroke(
-    clock.astronomicalStatus === ASTRONOMICAL_STATUS.DAY
-      ? theme.background
-      : theme.foreground
-  )
-  p.line(
-    0,
-    -responsive.sunRadius,
-    0,
-    -responsive.sunRadius + responsive.donutWidth
-  )
   p.pop()
 
   /*
