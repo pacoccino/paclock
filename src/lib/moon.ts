@@ -10,7 +10,7 @@ const NEW_MOON_BASE = new BN(1587608820000) // 24 janvier 2020	22:44:11
 // const DAYS_TO_MS = new BN(1000);
 const DAYS_TO_MS = new BN(24).times(60).times(60).times(1000)
 
-interface MoonState {
+export interface MoonState {
   age: BN
   age_n: number
   ageNorm: BN
@@ -23,7 +23,7 @@ interface MoonState {
   }
 }
 
-const MoonLib = {
+export const MoonLib = {
   calculate(date: moment.Moment): MoonState {
     const diffNow = new BN(+date).minus(NEW_MOON_BASE)
 
@@ -49,5 +49,3 @@ const MoonLib = {
     }
   },
 }
-
-export { MoonLib, MoonState }

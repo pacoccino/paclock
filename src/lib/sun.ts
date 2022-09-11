@@ -2,6 +2,8 @@
 Highly inspired by  https://gml.noaa.gov/grad/solcalc/ algorithm
 */
 
+// @ts-nocheck
+
 import moment from 'moment'
 
 export interface Hour {
@@ -15,7 +17,7 @@ export interface Location {
   long: number
 }
 
-interface SunState {
+export interface SunState {
   date: moment.Moment
   location: Location
   timezone: number

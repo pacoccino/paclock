@@ -1,7 +1,14 @@
 import BN from 'bignumber.js'
 import { useState, useEffect } from 'react'
+import { Clock } from '../lib/clock'
 
-function Row({ title, children }) {
+function Row({
+  title,
+  children,
+}: {
+  title: string
+  children: React.ReactNode
+}) {
   return (
     <div className="flex mb-1 ml-1">
       <div className="text-sm uppercase">{title}</div>
@@ -10,11 +17,11 @@ function Row({ title, children }) {
   )
 }
 
-function Title({ children }) {
+function Title({ children }: { children: React.ReactNode }) {
   return <h2 className="flex mb-2 mt-2">{children}</h2>
 }
 
-export function Infos({ clock }) {
+export function Infos({ clock }: { clock: Clock }) {
   const [now, setNow] = useState(clock.now)
 
   useEffect(() => {
