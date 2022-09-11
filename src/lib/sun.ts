@@ -30,6 +30,7 @@ interface SunState {
   noon: {
     timeLocal: number
     timeLocal_m: moment.Moment
+    // TODO : declination?
   }
   set: {
     jday: number

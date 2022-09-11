@@ -12,10 +12,10 @@ export function ReactApp() {
   return (
     <div className="relative">
       <div className={infoOpen ? 'hidden' : 'visible'}>
-        <Infos clock={clock} />
+        <Sketch clock={clock} />
       </div>
       <div className={infoOpen ? 'visible' : 'hidden'}>
-        <Sketch clock={clock} />
+        <Infos clock={clock} />
       </div>
       <div
         className="fixed right-0 top-0 m-4 text-xl cursor-pointer"

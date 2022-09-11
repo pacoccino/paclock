@@ -3,19 +3,22 @@ import { drawMoon } from './moon'
 import { drawSun } from './sun'
 import { drawText } from './texts'
 import { theme } from '../themes'
+import { Clock } from '../lib/clock'
 
 export interface Responsive {
   minW: number
   sunRadius: number
+  innerSunRadius: number
   moonRadius: number
   donutWidth: number
   baseFontWeight: number
 }
 
-export const clockSketch = (clock) => (p: P5) => {
+export const clockSketch = (clock: Clock) => (p: P5) => {
   const responsive: Responsive = {
     minW: 0,
     sunRadius: 0,
+    innerSunRadius: 0,
     moonRadius: 0,
     donutWidth: 0,
     baseFontWeight: 0,
@@ -32,6 +35,7 @@ export const clockSketch = (clock) => (p: P5) => {
       responsive.donutWidth = 0.1 * responsive.sunRadius
       responsive.baseFontWeight = 10
     }
+    responsive.innerSunRadius = responsive.sunRadius * 0.85
     responsive.moonRadius = responsive.minW * 0.14
   }
 

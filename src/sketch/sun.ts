@@ -5,7 +5,7 @@ import { ASTRONOMICAL_STATUS, Clock } from '../lib/clock'
 import { theme } from '../themes'
 import { Responsive } from '../sketch'
 
-function clockToGeo(clock) {
+function clockToGeo(clock: Clock) {
   const dayMinutes = 24 * 60
   const sunriseMinutes = clock.sun.rise.timeLocal
   const sunsetMinutes = clock.sun.set.timeLocal
@@ -18,6 +18,45 @@ function clockToGeo(clock) {
     noonAngle: (2 * Math.PI * (noonMinutes - nowMinutes)) / dayMinutes,
   }
   return geoClock
+}
+
+function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
+  const d = responsive.innerSunRadius
+
+  p.strokeWeight(1)
+  p.textAlign(p.CENTER, p.CENTER)
+  p.textSize(24)
+
+  p.noFill()
+  p.stroke(theme.f600)
+  p.circle(0, 0, d * 2)
+
+  function drawAngle(angle: number, icon: string) {
+    let v1 = p.createVector(0, -d * 0.9)
+    let v2 = p.createVector(0, -20)
+    let v3 = p.createVector(0, -10)
+
+    v1.rotate(p.radians(angle))
+    v2.rotate(p.radians(angle))
+    v3.rotate(p.radians(angle))
+    p.text(icon, v1.x, v1.y)
+    p.line(v1.x + v2.x, v1.y + v2.y, v1.x + v2.x + v3.x, v1.y + v2.y + v3.y)
+  }
+
+  p.fill(theme.cardinalDown)
+  p.stroke(theme.cardinalDown)
+  drawAngle(270, 'W')
+  drawAngle(90, 'E')
+  p.fill(theme.cardinalRaise)
+  p.stroke(theme.cardinalRaise)
+  drawAngle(0, 'N')
+  drawAngle(180, 'S')
+
+  p.stroke(theme.f400)
+  drawAngle(clock.sun.azel.azimuth, '☀️')
+  p.stroke(theme.f200)
+  drawAngle(clock.sun.set.azimuth, '👆')
+  drawAngle(clock.sun.rise.azimuth, '👇')
 }
 
 export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
@@ -101,5 +140,6 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
   )
   p.rotate(-geoClock.noonAngle)
 
+  drawAngles(p, clock, responsive)
   p.pop()
 }
