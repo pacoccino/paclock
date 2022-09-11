@@ -1,5 +1,6 @@
 import moment, { Moment } from 'moment'
 import { Location, Sun, Utils } from './lib/sun'
+import { MoonLib, MoonState } from './lib/moon'
 
 export enum ASTRONOMICAL_STATUS {
   DAY,
@@ -17,11 +18,14 @@ export class Clock {
   timezone: number
   interval: number
   location: Location
+  moon: MoonState
 
   constructor() {
     this.sunrise = moment({ hour: 0, minute: 0 })
     this.sunset = moment({ hour: 0, minute: 0 })
     this.noon = moment({ hour: 0, minute: 0 })
+
+    this.moon = MoonLib.getState()
 
     this.location = {
       lat: 48.864716, // Paris
@@ -118,6 +122,7 @@ export class Clock {
     }
 
     this.calculateSun()
+    this.moon = MoonLib.getState()
 
     this.astronomicalStatus =
       this.now.isAfter(this.sunrise) && this.now.isBefore(this.sunset)

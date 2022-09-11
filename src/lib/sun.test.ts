@@ -2,7 +2,7 @@ import moment from 'moment'
 
 import { Sun, Utils, Location } from './sun'
 
-export function Test() {
+export function SunTest() {
   const date = moment.utc({
     year: 2022,
     month: 7,
