@@ -55,8 +55,8 @@ function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
   p.stroke(theme.f400)
   drawAngle(clock.sun.azel.azimuth, '☀️')
   p.stroke(theme.f200)
-  drawAngle(clock.sun.set.azimuth, '👆')
-  drawAngle(clock.sun.rise.azimuth, '👇')
+  drawAngle(clock.sun.set.azimuth, '👇')
+  drawAngle(clock.sun.rise.azimuth, '👆')
 }
 
 export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
