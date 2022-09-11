@@ -1,6 +1,6 @@
 import P5 from 'p5'
 import { drawMoon } from './moon'
-import { drawSun } from './sun'
+import { SunSketch } from './sun'
 import { drawText } from './texts'
 import { theme } from '../themes'
 import { Clock } from '../lib/clock'
@@ -39,6 +39,8 @@ export const clockSketch = (clock: Clock) => (p: P5) => {
     responsive.moonRadius = responsive.minW * 0.14
   }
 
+  const sunSketch = new SunSketch(p, clock, responsive)
+
   p.setup = () => {
     p.createCanvas(window.innerWidth, window.innerHeight)
     p.background(theme.background)
@@ -52,10 +54,9 @@ export const clockSketch = (clock: Clock) => (p: P5) => {
   }
 
   p.draw = () => {
-    // Clear the frame
     p.background(theme.background)
 
-    drawSun(p, clock, responsive)
+    sunSketch.draw()
     drawText(p, clock, responsive)
     drawMoon(p, clock, responsive)
   }

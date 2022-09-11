@@ -1,3 +1,5 @@
+import P5 from 'p5'
+
 export const Themes = {
   bw: {
     background: 15,
@@ -7,8 +9,8 @@ export const Themes = {
     f600: 100,
     night: 15,
     day: 240,
-    cardinalRaise: '#cc1e1e',
-    cardinalDown: '#fde9a4',
+    cardinalRaise: '#ea2424',
+    cardinalDown: '#ece04d',
     sun: '#ffc407',
   },
   yb: {

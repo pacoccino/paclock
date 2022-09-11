@@ -5,175 +5,174 @@ import { ASTRONOMICAL_STATUS, Clock } from '../lib/clock'
 import { theme } from '../themes'
 import { Responsive } from '../sketch'
 
-function clockToGeo(clock: Clock) {
-  const dayMinutes = 24 * 60
-  const sunriseMinutes = clock.sun.rise.timeLocal
-  const sunsetMinutes = clock.sun.set.timeLocal
-  const noonMinutes = clock.sun.noon.timeLocal
-  const nowMinutes = clock.now.hours() * 60 + clock.now.minutes()
+export class SunSketch {
+  p: P5
+  clock: Clock
+  responsive: Responsive
 
-  const geoClock = {
-    sunriseAngle: (2 * Math.PI * (sunriseMinutes - nowMinutes)) / dayMinutes,
-    sunsetAngle: (2 * Math.PI * (sunsetMinutes - nowMinutes)) / dayMinutes,
-    noonAngle: (2 * Math.PI * (noonMinutes - nowMinutes)) / dayMinutes,
-  }
-  return geoClock
-}
-
-function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
-  const d = responsive.sunRadius - responsive.donutWidth
-
-  p.strokeWeight(1)
-  p.textAlign(p.CENTER, p.CENTER)
-  p.textSize(responsive.baseFontWeight * 1.8)
-
-  function drawAngle(angle: number, icon: string) {
-    let v1 = p.createVector(0, -d * 0.87)
-    let v2 = p.createVector(0, -d * 0.07)
-    let v3 = p.createVector(0, -d * 0.03)
-
-    v1.rotate(p.radians(angle))
-    v2.rotate(p.radians(angle))
-    v3.rotate(p.radians(angle))
-    p.text(icon, v1.x, v1.y)
-    p.line(v1.x + v2.x, v1.y + v2.y, v1.x + v2.x + v3.x, v1.y + v2.y + v3.y)
+  constructor(p: P5, clock: Clock, responsive: Responsive) {
+    this.p = p
+    this.clock = clock
+    this.responsive = responsive
   }
 
-  p.fill(theme.cardinalDown)
-  p.stroke(theme.cardinalDown)
-  drawAngle(270, 'E')
-  drawAngle(90, 'W')
-  p.fill(theme.cardinalRaise)
-  p.stroke(theme.cardinalRaise)
-  drawAngle(0, 'S')
-  drawAngle(180, 'N')
+  draw() {
+    this.p.push()
+    this.p.translate(this.p.width / 2, this.p.height / 2)
 
-  // p.stroke(theme.f200)
-  // drawAngle(clock.sun.set.azimuth, '👇')
-  // drawAngle(clock.sun.rise.azimuth, '👆')
-}
+    this.drawDonut()
+    this.drawElevation()
+    this.drawCompass()
 
-function drawElevation(p: P5, clock: Clock, responsive: Responsive) {
-  p.noFill()
-  p.stroke(theme.foreground)
-  p.line(
-    -responsive.sunRadius / 2,
-    -responsive.sunRadius / 3,
-    -responsive.sunRadius / 2,
-    responsive.sunRadius / 3
-  )
-  p.line(-responsive.sunRadius / 2 - 5, 0, -responsive.sunRadius / 2 + 5, 0)
-  p.line(
-    -responsive.sunRadius / 2 - 5,
-    -responsive.sunRadius / 3,
-    -responsive.sunRadius / 2 + 5,
-    -responsive.sunRadius / 3
-  )
-  p.line(
-    -responsive.sunRadius / 2 - 5,
-    responsive.sunRadius / 3,
-    -responsive.sunRadius / 2 + 5,
-    responsive.sunRadius / 3
-  )
+    this.p.pop()
+  }
 
-  p.noStroke()
-  p.fill(theme.foreground)
-  p.textAlign(p.RIGHT, p.CENTER)
-  p.text('0°', -responsive.sunRadius / 2 - 12, 0)
-  p.text('90°', -responsive.sunRadius / 2 - 12, -responsive.sunRadius / 3)
-  p.text('-90°', -responsive.sunRadius / 2 - 12, responsive.sunRadius / 3)
+  drawDonut() {
+    // ARC Night
+    this.p.fill(theme.night)
+    this.p.noStroke()
+    this.p.arc(
+      0,
+      0,
+      this.responsive.sunRadius * 2,
+      this.responsive.sunRadius * 2,
+      this.p.radians(this.clock.sun.set.azimuth) + Math.PI / 2,
+      this.p.radians(this.clock.sun.rise.azimuth) + Math.PI / 2
+    )
 
-  p.noStroke()
-  p.fill(theme.sun)
-  p.circle(
-    -responsive.sunRadius / 2,
-    -p.map(clock.sun.azel.elevation, 0, 90, 0, responsive.sunRadius / 3),
-    15
-  )
-}
-export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
-  const geoClock = clockToGeo(clock)
+    // ARC Day
+    this.p.fill(theme.day)
+    this.p.noStroke()
+    this.p.arc(
+      0,
+      0,
+      this.responsive.sunRadius * 2,
+      this.responsive.sunRadius * 2,
+      this.p.radians(this.clock.sun.rise.azimuth) + Math.PI / 2,
+      this.p.radians(this.clock.sun.set.azimuth) + Math.PI / 2
+    )
 
-  p.push()
+    // Make donut hole
+    this.p.fill(theme.background)
+    this.p.noStroke()
+    this.p.circle(
+      0,
+      0,
+      (this.responsive.sunRadius - this.responsive.donutWidth) * 2
+    )
 
-  p.translate(p.width / 2, p.height / 2)
+    // rings
+    this.p.strokeWeight(2)
+    // outer ring
+    this.p.noFill()
+    this.p.stroke(theme.foreground)
+    this.p.circle(0, 0, this.responsive.sunRadius * 2)
+    // inner ring
+    this.p.noFill()
+    this.p.stroke(theme.foreground)
+    this.p.circle(
+      0,
+      0,
+      (this.responsive.sunRadius - this.responsive.donutWidth) * 2
+    )
 
-  // ARC Night
-  p.fill(theme.night)
-  p.noStroke()
-  p.arc(
-    0,
-    0,
-    responsive.sunRadius * 2,
-    responsive.sunRadius * 2,
-    p.radians(clock.sun.set.azimuth) + Math.PI / 2,
-    p.radians(clock.sun.rise.azimuth) + Math.PI / 2
-  )
+    this.p.noStroke()
+    this.p.fill(theme.sun)
+    let v1 = this.p.createVector(
+      0,
+      -this.responsive.sunRadius + (1 / 2) * this.responsive.donutWidth
+    )
+    v1.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
+    this.p.circle(v1.x, v1.y, this.responsive.donutWidth)
 
-  // ARC Day
-  p.fill(theme.day)
-  p.noStroke()
-  p.arc(
-    0,
-    0,
-    responsive.sunRadius * 2,
-    responsive.sunRadius * 2,
-    p.radians(clock.sun.rise.azimuth) + Math.PI / 2,
-    p.radians(clock.sun.set.azimuth) + Math.PI / 2
-  )
+    // cursor
+    // outer
+    this.p.strokeWeight(2)
+    this.p.noFill()
+    this.p.stroke(theme.foreground)
 
-  // Make donut hole
-  p.fill(theme.background)
-  p.noStroke()
-  p.circle(0, 0, (responsive.sunRadius - responsive.donutWidth) * 2)
+    this.p.push()
+    this.p.stroke(theme.sun)
+    this.p.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
+    this.p.line(
+      0,
+      -0.4 * this.responsive.sunRadius,
+      0,
+      -0.8 * this.responsive.sunRadius
+    )
+    this.p.pop()
 
-  // rings
-  p.strokeWeight(2)
-  // outer ring
-  p.noFill()
-  p.stroke(theme.foreground)
-  p.circle(0, 0, responsive.sunRadius * 2)
-  // inner ring
-  p.noFill()
-  p.stroke(theme.foreground)
-  p.circle(0, 0, (responsive.sunRadius - responsive.donutWidth) * 2)
+    /*
+    // solar noon
+    this.p.rotate(geoClock.noonAngle)
+    this.p.stroke(theme.f600)
+    this.p.line(
+      0,
+      -this.responsive.sunRadius,
+      0,
+      -this.responsive.sunRadius + this.responsive.donutWidth
+    )
+    this.p.rotate(-geoClock.noonAngle)
+     */
+  }
 
-  p.noStroke()
-  p.fill(theme.sun)
-  let v1 = p.createVector(
-    0,
-    -responsive.sunRadius + (1 / 2) * responsive.donutWidth
-  )
-  v1.rotate(p.radians(clock.sun.azel.azimuth + 180))
-  p.circle(v1.x, v1.y, responsive.donutWidth)
+  drawElevation() {
+    const xOffset = -this.responsive.sunRadius / 2
+    const height = this.responsive.sunRadius / 4
+    this.p.noFill()
+    this.p.stroke(theme.foreground)
+    this.p.line(xOffset, -height, xOffset, height)
+    this.p.line(xOffset - 5, 0, xOffset + 5, 0)
+    this.p.line(xOffset - 5, -height, xOffset + 5, -height)
+    this.p.line(xOffset - 5, height, xOffset + 5, height)
 
-  // cursor
-  // outer
-  p.strokeWeight(2)
-  p.noFill()
-  p.stroke(theme.foreground)
+    this.p.noStroke()
+    this.p.fill(theme.foreground)
+    this.p.textAlign(this.p.RIGHT, this.p.CENTER)
+    this.p.text('0°', xOffset - 12, 0)
+    this.p.text('90°', xOffset - 12, -height)
+    this.p.text('-90°', xOffset - 12, height)
 
-  p.push()
-  p.stroke(theme.sun)
-  p.rotate(p.radians(clock.sun.azel.azimuth + 180))
-  p.line(0, -0.4 * responsive.sunRadius, 0, -0.8 * responsive.sunRadius)
-  p.pop()
+    this.p.noStroke()
+    this.p.fill(theme.sun)
+    this.p.circle(
+      xOffset,
+      -this.p.map(this.clock.sun.azel.elevation, 0, 90, 0, height),
+      15
+    )
+  }
+  drawCompass() {
+    const d = this.responsive.sunRadius - this.responsive.donutWidth
 
-  /*
-  // solar noon
-  p.rotate(geoClock.noonAngle)
-  p.stroke(theme.f600)
-  p.line(
-    0,
-    -responsive.sunRadius,
-    0,
-    -responsive.sunRadius + responsive.donutWidth
-  )
-  p.rotate(-geoClock.noonAngle)
-   */
+    this.p.textAlign(this.p.CENTER, this.p.CENTER)
+    this.p.textSize(this.responsive.baseFontWeight * 1.8)
 
-  drawElevation(p, clock, responsive)
+    const drawAngle = (angle: number, icon: string, color: string) => {
+      let v1 = this.p.createVector(0, -d * 0.87) // center
+      let v2 = this.p.createVector(0, -d * 0.07) // line margin
+      let v3 = this.p.createVector(0, -d * 0.03) // line length
 
-  drawAngles(p, clock, responsive)
-  p.pop()
+      v1.rotate(this.p.radians(angle))
+      v2.rotate(this.p.radians(angle))
+      v3.rotate(this.p.radians(angle))
+
+      this.p.noStroke()
+      this.p.fill(color)
+      this.p.text(icon, v1.x, v1.y)
+
+      this.p.noFill()
+      this.p.stroke(color)
+      this.p.line(
+        v1.x + v2.x,
+        v1.y + v2.y,
+        v1.x + v2.x + v3.x,
+        v1.y + v2.y + v3.y
+      )
+    }
+
+    drawAngle(270, 'E', theme.cardinalDown)
+    drawAngle(90, 'W', theme.cardinalDown)
+    drawAngle(0, 'S', theme.cardinalRaise)
+    drawAngle(180, 'N', theme.cardinalRaise)
+  }
 }
