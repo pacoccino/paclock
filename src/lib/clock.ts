@@ -1,6 +1,6 @@
 import moment, { Moment } from 'moment'
-import { Location, Sun, Utils } from './lib/sun'
-import { MoonLib, MoonState } from './lib/moon'
+import { Location, Sun, SunState } from './sun'
+import { MoonLib, MoonState } from './moon'
 
 export enum ASTRONOMICAL_STATUS {
   DAY,
@@ -11,21 +11,16 @@ const TESTMODE = window.location.search === '?test'
 
 export class Clock {
   now: Moment
-  sunrise: Moment
-  sunset: Moment
-  noon: Moment
   astronomicalStatus: ASTRONOMICAL_STATUS
   timezone: number
-  interval: number
+  interval: number | undefined
   location: Location
   moon: MoonState
+  sun: SunState
 
   constructor() {
-    this.sunrise = moment({ hour: 0, minute: 0 })
-    this.sunset = moment({ hour: 0, minute: 0 })
-    this.noon = moment({ hour: 0, minute: 0 })
-
-    this.moon = MoonLib.getState()
+    this.now = moment()
+    this.astronomicalStatus = ASTRONOMICAL_STATUS.DAY
 
     this.location = {
       lat: 48.864716, // Paris
@@ -33,6 +28,9 @@ export class Clock {
     }
 
     this.timezone = -new Date().getTimezoneOffset() / 60
+
+    this.sun = Sun.calculate(this.now, this.location, this.timezone)
+    this.moon = MoonLib.calculate(this.now)
 
     this.tick()
     this.getLocation()
@@ -93,27 +91,6 @@ export class Clock {
   }
    */
 
-  calculateSun() {
-    const result = Sun.calculate(this.now, this.location, this.timezone)
-
-    const sunnoon = Utils.minutesToHour(result.solnoon)
-    const sunrise = Utils.minutesToHour(result.rise.timelocal)
-    const sunset = Utils.minutesToHour(result.set.timelocal)
-
-    this.sunset = moment({
-      hour: sunset.hours,
-      minute: sunset.minutes,
-    })
-    this.sunrise = moment({
-      hour: sunrise.hours,
-      minute: sunrise.minutes,
-    })
-    this.noon = moment({
-      hour: sunnoon.hours,
-      minute: sunnoon.minutes,
-    })
-  }
-
   tick() {
     if (this.now && TESTMODE) {
       this.now = this.now.add(30, 'minutes')
@@ -121,11 +98,12 @@ export class Clock {
       this.now = moment()
     }
 
-    this.calculateSun()
-    this.moon = MoonLib.getState()
+    this.sun = Sun.calculate(this.now, this.location, this.timezone)
+    this.moon = MoonLib.calculate(this.now)
 
     this.astronomicalStatus =
-      this.now.isAfter(this.sunrise) && this.now.isBefore(this.sunset)
+      this.now.isAfter(this.sun.rise.timeLocal_m) &&
+      this.now.isBefore(this.sun.set.timeLocal_m)
         ? ASTRONOMICAL_STATUS.DAY
         : ASTRONOMICAL_STATUS.NIGHT
   }

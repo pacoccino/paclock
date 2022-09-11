@@ -1,22 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 html,
 body {
   background-color: black;
-  font-size: 20px;
+  font-size: 18px;
   font-family: sans-serif;
   color: white;
-}
-
-:root {
-  --brightness: 1;
-  --contrast: 100%;
-}
-
-#root {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
-  filter: brightness(var(--brightness)) contrast(var(--contrast));
 }
 
 .noselect {

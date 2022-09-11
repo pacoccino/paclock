@@ -7,6 +7,8 @@ export const Themes = {
     f600: 100,
     night: 15,
     day: 240,
+    cardinalRaise: '#8a0101',
+    cardinalDown: '#ffdf75',
   },
   yb: {
     background: 15,

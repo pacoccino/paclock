@@ -2,6 +2,8 @@
 Highly inspired by  https://gml.noaa.gov/grad/solcalc/ algorithm
 */
 
+// @ts-nocheck
+
 import moment from 'moment'
 
 export interface Hour {
@@ -15,7 +17,7 @@ export interface Location {
   long: number
 }
 
-interface SunResult {
+export interface SunState {
   date: moment.Moment
   location: Location
   timezone: number
@@ -26,17 +28,23 @@ interface SunResult {
     elevation: number
   }
   sunDeclination: number
-  solnoon: number
   eqTime: number
+  noon: {
+    timeLocal: number
+    timeLocal_m: moment.Moment
+    // TODO : declination?
+  }
   set: {
     jday: number
     azimuth: number
-    timelocal: number
+    timeLocal: number
+    timeLocal_m: moment.Moment
   }
   rise: {
     jday: number
     azimuth: number
-    timelocal: number
+    timeLocal: number
+    timeLocal_m: moment.Moment
   }
 }
 
@@ -369,7 +377,13 @@ const Sun = {
       solNoonLocal -= 1440.0
     }
 
-    return solNoonLocal
+    const timeLocal_h = Utils.minutesToHour(solNoonLocal)
+
+    const timeLocal_m = moment({
+      hour: timeLocal_h.hours,
+      minute: timeLocal_h.minutes,
+    })
+    return { timeLocal: solNoonLocal, timeLocal_m }
   },
 
   calcSunriseSetUTC(rise, JD, latitude, longitude) {
@@ -445,7 +459,13 @@ const Sun = {
       }
     }
 
-    return { jday: jday, timelocal: timeLocal, azimuth: azimuth }
+    const timeLocal_h = Utils.minutesToHour(timeLocal)
+
+    const timeLocal_m = moment({
+      hour: timeLocal_h.hours,
+      minute: timeLocal_h.minutes,
+    })
+    return { jday, timeLocal, azimuth, timeLocal_m }
   },
 
   calcJDofNextPrevRiseSet(next, rise, JD, latitude, longitude, tz) {
@@ -471,7 +491,7 @@ const Sun = {
     date: moment.Moment,
     location: Location,
     timezone: number
-  ): SunResult {
+  ): SunState {
     const jday = Sun.getJD(date.year(), date.month() + 1, date.day())
     const dayMinutes = date.hour() * 60 + date.minute() + date.second() / 60.0
     const jdaytotal = jday + dayMinutes / 1440 - timezone / 24
@@ -483,7 +503,7 @@ const Sun = {
       location.long,
       timezone
     )
-    const solnoon = Sun.calcSolNoon(jday, location.long, timezone)
+    const noon = Sun.calcSolNoon(jday, location.long, timezone)
     const rise = Sun.calcSunriseSet(
       1,
       jday,
@@ -509,7 +529,7 @@ const Sun = {
       jday,
       jcent,
       azel,
-      solnoon,
+      noon,
       rise,
       set,
       eqTime,
