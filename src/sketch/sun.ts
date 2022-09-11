@@ -53,6 +53,44 @@ function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
   // drawAngle(clock.sun.rise.azimuth, '👆')
 }
 
+function drawElevation(p: P5, clock: Clock, responsive: Responsive) {
+  p.noFill()
+  p.stroke(theme.foreground)
+  p.line(
+    -responsive.sunRadius / 2,
+    -responsive.sunRadius / 3,
+    -responsive.sunRadius / 2,
+    responsive.sunRadius / 3
+  )
+  p.line(-responsive.sunRadius / 2 - 5, 0, -responsive.sunRadius / 2 + 5, 0)
+  p.line(
+    -responsive.sunRadius / 2 - 5,
+    -responsive.sunRadius / 3,
+    -responsive.sunRadius / 2 + 5,
+    -responsive.sunRadius / 3
+  )
+  p.line(
+    -responsive.sunRadius / 2 - 5,
+    responsive.sunRadius / 3,
+    -responsive.sunRadius / 2 + 5,
+    responsive.sunRadius / 3
+  )
+
+  p.noStroke()
+  p.fill(theme.foreground)
+  p.textAlign(p.RIGHT, p.CENTER)
+  p.text('0°', -responsive.sunRadius / 2 - 12, 0)
+  p.text('90°', -responsive.sunRadius / 2 - 12, -responsive.sunRadius / 3)
+  p.text('-90°', -responsive.sunRadius / 2 - 12, responsive.sunRadius / 3)
+
+  p.noStroke()
+  p.fill(theme.sun)
+  p.circle(
+    -responsive.sunRadius / 2,
+    -p.map(clock.sun.azel.elevation, 0, 90, 0, responsive.sunRadius / 3),
+    15
+  )
+}
 export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
   const geoClock = clockToGeo(clock)
 
@@ -133,6 +171,8 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
   )
   p.rotate(-geoClock.noonAngle)
    */
+
+  drawElevation(p, clock, responsive)
 
   drawAngles(p, clock, responsive)
   p.pop()
