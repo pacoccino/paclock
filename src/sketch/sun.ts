@@ -21,15 +21,11 @@ function clockToGeo(clock: Clock) {
 }
 
 function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
-  const d = responsive.innerSunRadius
+  const d = responsive.sunRadius - responsive.donutWidth
 
   p.strokeWeight(1)
   p.textAlign(p.CENTER, p.CENTER)
   p.textSize(responsive.baseFontWeight * 1.8)
-
-  p.noFill()
-  p.stroke(theme.f600)
-  p.circle(0, 0, d * 2)
 
   function drawAngle(angle: number, icon: string) {
     let v1 = p.createVector(0, -d * 0.87)
@@ -52,11 +48,9 @@ function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
   drawAngle(0, 'N')
   drawAngle(180, 'S')
 
-  p.stroke(theme.f400)
-  drawAngle(clock.sun.azel.azimuth, '☀️')
-  p.stroke(theme.f200)
-  drawAngle(clock.sun.set.azimuth, '👇')
-  drawAngle(clock.sun.rise.azimuth, '👆')
+  // p.stroke(theme.f200)
+  // drawAngle(clock.sun.set.azimuth, '👇')
+  // drawAngle(clock.sun.rise.azimuth, '👆')
 }
 
 export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
@@ -74,8 +68,8 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
     0,
     responsive.sunRadius * 2,
     responsive.sunRadius * 2,
-    geoClock.sunsetAngle - Math.PI / 2,
-    geoClock.sunriseAngle - Math.PI / 2
+    p.radians(clock.sun.set.azimuth) - Math.PI / 2,
+    p.radians(clock.sun.rise.azimuth) - Math.PI / 2
   )
 
   // ARC Day
@@ -86,8 +80,8 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
     0,
     responsive.sunRadius * 2,
     responsive.sunRadius * 2,
-    geoClock.sunriseAngle - Math.PI / 2,
-    geoClock.sunsetAngle - Math.PI / 2
+    p.radians(clock.sun.rise.azimuth) - Math.PI / 2,
+    p.radians(clock.sun.set.azimuth) - Math.PI / 2
   )
 
   // Make donut hole
@@ -106,17 +100,25 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
   p.stroke(theme.foreground)
   p.circle(0, 0, (responsive.sunRadius - responsive.donutWidth) * 2)
 
+  p.noStroke()
+  p.fill(theme.sun)
+  let v1 = p.createVector(
+    0,
+    -responsive.sunRadius + (1 / 2) * responsive.donutWidth
+  )
+  v1.rotate(p.radians(clock.sun.azel.azimuth))
+  p.circle(v1.x, v1.y, responsive.donutWidth)
+
   // cursor
   // outer
   p.strokeWeight(2)
   p.noFill()
   p.stroke(theme.foreground)
-  p.line(
-    0,
-    -responsive.sunRadius - (1 / 2) * responsive.donutWidth,
-    0,
-    -responsive.sunRadius + (3 / 2) * responsive.donutWidth
-  )
+
+  p.push()
+  p.stroke(theme.sun)
+  p.rotate(p.radians(clock.sun.azel.azimuth))
+  p.line(0, -0.4 * responsive.sunRadius, 0, -0.8 * responsive.sunRadius)
   // inner
   p.stroke(
     clock.astronomicalStatus === ASTRONOMICAL_STATUS.DAY
@@ -129,6 +131,9 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
     0,
     -responsive.sunRadius + responsive.donutWidth
   )
+  p.pop()
+
+  /*
   // solar noon
   p.rotate(geoClock.noonAngle)
   p.stroke(theme.f600)
@@ -139,6 +144,7 @@ export function drawSun(p: P5, clock: Clock, responsive: Responsive) {
     -responsive.sunRadius + responsive.donutWidth
   )
   p.rotate(-geoClock.noonAngle)
+   */
 
   drawAngles(p, clock, responsive)
   p.pop()
