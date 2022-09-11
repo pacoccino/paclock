@@ -13,7 +13,7 @@ export class Clock {
   now: Moment
   astronomicalStatus: ASTRONOMICAL_STATUS
   timezone: number
-  interval: number | undefined
+  interval: ReturnType<typeof setInterval> | undefined
   location: Location
   moon: MoonState
   sun: SunState
