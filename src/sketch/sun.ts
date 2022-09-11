@@ -25,16 +25,16 @@ function drawAngles(p: P5, clock: Clock, responsive: Responsive) {
 
   p.strokeWeight(1)
   p.textAlign(p.CENTER, p.CENTER)
-  p.textSize(24)
+  p.textSize(responsive.baseFontWeight * 1.8)
 
   p.noFill()
   p.stroke(theme.f600)
   p.circle(0, 0, d * 2)
 
   function drawAngle(angle: number, icon: string) {
-    let v1 = p.createVector(0, -d * 0.9)
-    let v2 = p.createVector(0, -20)
-    let v3 = p.createVector(0, -10)
+    let v1 = p.createVector(0, -d * 0.87)
+    let v2 = p.createVector(0, -d * 0.07)
+    let v3 = p.createVector(0, -d * 0.03)
 
     v1.rotate(p.radians(angle))
     v2.rotate(p.radians(angle))

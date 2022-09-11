@@ -29,11 +29,11 @@ export const clockSketch = (clock: Clock) => (p: P5) => {
     if (responsive.minW > 500) {
       responsive.sunRadius = (responsive.minW * 0.85) / 2
       responsive.donutWidth = 0.07 * responsive.sunRadius
-      responsive.baseFontWeight = 14
+      responsive.baseFontWeight = 12
     } else {
       responsive.sunRadius = (responsive.minW * 0.9) / 2
       responsive.donutWidth = 0.1 * responsive.sunRadius
-      responsive.baseFontWeight = 10
+      responsive.baseFontWeight = 8
     }
     responsive.innerSunRadius = responsive.sunRadius * 0.85
     responsive.moonRadius = responsive.minW * 0.14
