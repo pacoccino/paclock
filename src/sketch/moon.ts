@@ -9,7 +9,10 @@ export function drawMoon(p: P5, clock: Clock, responsive: Responsive) {
 
   p.push()
 
-  p.translate(p.width / 2, p.height / 2 - responsive.sunRadius / 2)
+  p.translate(
+    p.width / 2,
+    p.height / 2 - responsive.sunRadius / 2 + responsive.donutWidth / 2
+  )
 
   /* TODO inclination
   const incl = p.HALF_PI - (clock.location.lat / 180) * p.PI

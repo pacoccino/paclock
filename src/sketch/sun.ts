@@ -23,7 +23,35 @@ export class SunSketch {
     this.drawDonut()
     this.drawElevation()
     this.drawCompass()
+    this.drawAiguilles()
 
+    this.p.pop()
+  }
+
+  drawAiguilles() {
+    // Sun
+    this.p.strokeWeight(1)
+    this.p.stroke(theme.f600)
+    this.p.fill(theme.sun)
+    let sunPosition = this.p.createVector(
+      0,
+      -this.responsive.sunRadius + (1 / 2) * this.responsive.donutWidth
+    )
+    sunPosition.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
+    this.p.circle(sunPosition.x, sunPosition.y, this.responsive.donutWidth + 15)
+
+    // aiguille
+    this.p.push()
+    this.p.noFill()
+    this.p.strokeWeight(2)
+    this.p.stroke(theme.sun)
+    this.p.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
+    this.p.line(
+      0,
+      -0.4 * this.responsive.sunRadius,
+      0,
+      -0.8 * this.responsive.sunRadius
+    )
     this.p.pop()
   }
 
@@ -76,30 +104,6 @@ export class SunSketch {
       (this.responsive.sunRadius - this.responsive.donutWidth) * 2
     )
 
-    // Sun
-    this.p.strokeWeight(1)
-    this.p.stroke(theme.f600)
-    this.p.fill(theme.sun)
-    let sunPosition = this.p.createVector(
-      0,
-      -this.responsive.sunRadius + (1 / 2) * this.responsive.donutWidth
-    )
-    sunPosition.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
-    this.p.circle(sunPosition.x, sunPosition.y, this.responsive.donutWidth + 15)
-
-    // aiguille
-    this.p.push()
-    this.p.noFill()
-    this.p.strokeWeight(2)
-    this.p.stroke(theme.sun)
-    this.p.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
-    this.p.line(
-      0,
-      -0.4 * this.responsive.sunRadius,
-      0,
-      -0.8 * this.responsive.sunRadius
-    )
-    this.p.pop()
     /*
     // goldens
     this.p.push()
@@ -158,11 +162,11 @@ export class SunSketch {
     const d = this.responsive.sunRadius - this.responsive.donutWidth
 
     this.p.textAlign(this.p.CENTER, this.p.CENTER)
-    this.p.textSize(this.responsive.baseFontWeight * 1.8)
+    this.p.textSize(this.responsive.baseFontWeight * 1.6)
 
     const drawAngle = (angle: number, icon: string, color: string) => {
-      let v1 = this.p.createVector(0, -d * 0.87) // center
-      let v2 = this.p.createVector(0, -d * 0.07) // line margin
+      let v1 = this.p.createVector(0, -d * 0.89) // center
+      let v2 = this.p.createVector(0, -d * 0.05) // line margin
       let v3 = this.p.createVector(0, -d * 0.03) // line length
 
       v1.rotate(this.p.radians(angle))
