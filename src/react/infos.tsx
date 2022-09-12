@@ -34,7 +34,7 @@ export function Infos({ clock }: { clock: Clock }) {
   })
 
   return (
-    <div className="bg-black mx-8 my-8">
+    <div className="mx-8 my-8">
       <div className="max-w-xs mx-auto">
         <h1 className="text-center mb-2">PaClock</h1>
         <Title>🌏 General</Title>
