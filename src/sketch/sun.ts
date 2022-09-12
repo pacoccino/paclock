@@ -76,22 +76,20 @@ export class SunSketch {
       (this.responsive.sunRadius - this.responsive.donutWidth) * 2
     )
 
+    // Sun
     this.p.noStroke()
     this.p.fill(theme.sun)
-    let v1 = this.p.createVector(
+    let sunPosition = this.p.createVector(
       0,
       -this.responsive.sunRadius + (1 / 2) * this.responsive.donutWidth
     )
-    v1.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
-    this.p.circle(v1.x, v1.y, this.responsive.donutWidth)
+    sunPosition.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
+    this.p.circle(sunPosition.x, sunPosition.y, this.responsive.donutWidth)
 
-    // cursor
-    // outer
-    this.p.strokeWeight(2)
-    this.p.noFill()
-    this.p.stroke(theme.foreground)
-
+    // aiguille
     this.p.push()
+    this.p.noFill()
+    this.p.strokeWeight(2)
     this.p.stroke(theme.sun)
     this.p.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
     this.p.line(
@@ -101,33 +99,47 @@ export class SunSketch {
       -0.8 * this.responsive.sunRadius
     )
     this.p.pop()
-
     /*
-    // solar noon
-    this.p.rotate(geoClock.noonAngle)
-    this.p.stroke(theme.f600)
-    this.p.line(
-      0,
-      -this.responsive.sunRadius,
-      0,
-      -this.responsive.sunRadius + this.responsive.donutWidth
-    )
-    this.p.rotate(-geoClock.noonAngle)
-     */
+    // goldens
+    this.p.push()
+    this.p.rotate(this.p.radians(this.clock.sun.set.azimuth + 180))
+    this.p.noFill()
+    this.p.strokeWeight(1)
+    this.p.stroke(theme.sun)
+    const bluecolor = this.p.createVector(0, 0.21, 0.96)
+    const goldencolor = this.p.createVector(1, 0.8, 0.08)
+    const subcolor = P5.Vector.sub(bluecolor, goldencolor)
+    for (let i = -30; i < 30; i++) {
+      this.p.push()
+      const color = P5.Vector.add(
+        goldencolor,
+        P5.Vector.mult(subcolor, (i + 30) * (1 / 60))
+      ).mult(255)
+      this.p.stroke(color.array())
+      this.p.rotate(this.p.radians(i / 8))
+      this.p.line(
+        0,
+        -this.responsive.sunRadius + 1,
+        0,
+        -this.responsive.sunRadius + this.responsive.donutWidth - 1
+      )
+      this.p.pop()
+    }
+    this.p.pop()*/
   }
 
   drawElevation() {
     const xOffset = -this.responsive.sunRadius / 2
     const height = this.responsive.sunRadius / 4
     this.p.noFill()
-    this.p.stroke(theme.foreground)
+    this.p.stroke(theme.f400)
     this.p.line(xOffset, -height, xOffset, height)
     this.p.line(xOffset - 5, 0, xOffset + 5, 0)
     this.p.line(xOffset - 5, -height, xOffset + 5, -height)
     this.p.line(xOffset - 5, height, xOffset + 5, height)
 
     this.p.noStroke()
-    this.p.fill(theme.foreground)
+    this.p.fill(theme.f400)
     this.p.textAlign(this.p.RIGHT, this.p.CENTER)
     this.p.text('0°', xOffset - 12, 0)
     this.p.text('90°', xOffset - 12, -height)
