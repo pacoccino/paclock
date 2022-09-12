@@ -16,13 +16,21 @@ export class SunSketch {
     this.responsive = responsive
   }
 
-  draw() {
+  drawL1() {
     this.p.push()
     this.p.translate(this.p.width / 2, this.p.height / 2)
 
     this.drawDonut()
     this.drawElevation()
     this.drawCompass()
+
+    this.p.pop()
+  }
+
+  drawL2() {
+    this.p.push()
+    this.p.translate(this.p.width / 2, this.p.height / 2)
+
     this.drawAiguilles()
 
     this.p.pop()

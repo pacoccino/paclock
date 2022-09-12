@@ -56,8 +56,9 @@ export const clockSketch = (clock: Clock) => (p: P5) => {
   p.draw = () => {
     p.background(theme.background)
 
-    sunSketch.draw()
+    sunSketch.drawL1()
     drawText(p, clock, responsive)
     drawMoon(p, clock, responsive)
+    sunSketch.drawL2()
   }
 }
