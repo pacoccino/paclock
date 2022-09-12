@@ -12,10 +12,10 @@ export function ReactApp() {
 
   return (
     <div>
-      <div
+      {/*<div
         className="fixed w-full h-full top-0 left-0 bottom-0 right-0"
         style={{ backgroundColor: theme.background }}
-      />
+      />*/}
       <div className="relative">
         <div className={infoOpen ? 'hidden' : 'visible'}>
           <Sketch clock={clock} />
