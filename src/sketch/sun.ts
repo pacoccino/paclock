@@ -77,14 +77,15 @@ export class SunSketch {
     )
 
     // Sun
-    this.p.noStroke()
+    this.p.strokeWeight(1)
+    this.p.stroke(theme.f600)
     this.p.fill(theme.sun)
     let sunPosition = this.p.createVector(
       0,
       -this.responsive.sunRadius + (1 / 2) * this.responsive.donutWidth
     )
     sunPosition.rotate(this.p.radians(this.clock.sun.azel.azimuth + 180))
-    this.p.circle(sunPosition.x, sunPosition.y, this.responsive.donutWidth)
+    this.p.circle(sunPosition.x, sunPosition.y, this.responsive.donutWidth + 15)
 
     // aiguille
     this.p.push()
