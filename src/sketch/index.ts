@@ -36,7 +36,7 @@ export const clockSketch = (clock: Clock) => (p: P5) => {
       responsive.baseFontWeight = 8
     }
     responsive.innerSunRadius = responsive.sunRadius * 0.85
-    responsive.moonRadius = responsive.minW * 0.14
+    responsive.moonRadius = responsive.minW * 0.12
   }
 
   const sunSketch = new SunSketch(p, clock, responsive)
